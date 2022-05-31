@@ -4,6 +4,16 @@ import renderToDOM from '../../helpers/renderToDom';
 const viewBook = (obj) => {
   clearDom();
 
+  // object = {
+  //   authorObject: {
+  //     first name:
+  //     last name:
+  //   },
+  //   title,
+  //   firebaseKey,
+  //   image
+  // }
+
   const domString = `
   <div class="mt-5 d-flex flex-wrap">
    <div class="d-flex flex-column">

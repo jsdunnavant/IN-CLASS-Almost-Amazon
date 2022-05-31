@@ -6,10 +6,10 @@ const showBooks = (array) => {
 
   const btnString = '<button class="btn btn-success btn-lg mb-4" id="add-book-btn">Add A Book</button>';
   renderToDOM('#add-button', btnString);
-
-  let domString = '';
-  array.forEach((item) => {
-    domString += `
+  if (array.length) {
+    let domString = '';
+    array.forEach((item) => {
+      domString += `
       <div class="card">
         <img class="card-img-top" src=${item.image} alt=${item.title} style="height: 400px;">
         <div class="card-body" style="height: 180px;">
@@ -21,8 +21,9 @@ const showBooks = (array) => {
             <i id="delete-book-btn--${item.firebaseKey}" class="btn btn-danger fas fa-trash-alt"></i>
         </div>
       </div>`;
-  });
-  renderToDOM('#store', domString);
+    });
+    renderToDOM('#store', domString);
+  }
 };
 
 const emptyBooks = () => {
