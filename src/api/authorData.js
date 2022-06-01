@@ -4,53 +4,73 @@ import firebaseConfig from './apiKeys';
 const dbUrl = firebaseConfig.databaseURL;
 
 // FIXME:  GET ALL AUTHORS
-const getAuthors = () => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/authors.json`)
+const getAuthors = (uid) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/authors.json?orderBy="uid"equalTo="${uid}"`)
     .then((response) => {
-      if (response.data) {
-        resolve(Object.values(response.data));
+      if (response.data === null) {
+        resolve(null);
       } else {
-        resolve([]);
+        resolve(Object.values(response.data));
       }
     })
     .catch((error) => reject(error));
 });
 
+// FIXME:  GET FAVORITE AUTHORS
+// const getFavoriteAuthors = () => new Promise((resolve, reject) => {
+//   axios.get(`${dbUrl}/authors.json?orderBy="favorite"&equalTo=true`)
+//     .then((response) => {
+//       if (response.data === null) {
+//         resolve(null);
+//       } else {
+//         resolve(Object.values(response.data));
+//       }
+//     })
+//     .catch((error) => reject(error));
+// });
+
 // FIXME: CREATE AUTHOR
-const createAuthor = (authorObject) => new Promise((resolve, reject) => {
-  axios.post(`${dbUrl}/authors.json`, authorObject)
+
+const createAuthor = (authorObj) => new Promise((resolve, reject) => {
+  axios.post(`${dbUrl}/authors.json`, authorObj)
     .then((response) => {
-      const body = { firebaseKey: response.data.name };
-      axios.patch(`${dbUrl}/authors/${response.data.name}.json`, body)
+      const payload = { firebaseKey: response.data.name };
+      axios.patch(`${dbUrl}/authors/${response.data.name}.json`, payload)
         .then(() => {
-          getAuthors(authorObject.uid).then(resolve);
+          getAuthors(authorObj.uid).then(resolve);
         });
-    }).catch((error) => reject(error));
+    }).catch(reject);
 });
 
 // FIXME: GET SINGLE AUTHOR
 const getSingleAuthor = (firebaseKey) => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/authors/${firebaseKey}.json`)
     .then((response) => resolve(response.data))
-    .catch(reject);
+    .catch((error) => reject(error));
 });
 
 // FIXME: DELETE AUTHOR
 const deleteSingleAuthor = (firebaseKey) => new Promise((resolve, reject) => {
   axios.delete(`${dbUrl}/authors/${firebaseKey}.json`)
     .then(() => {
+      getAuthors().then((authorsArray) => resolve(authorsArray));
+    })
+    .catch((error) => reject(error));
+});
+
+// FIXME: UPDATE AUTHOR
+const updateAuthor = (firebaseKey, authorObj) => new Promise((resolve, reject) => {
+  axios.patch(`${dbUrl}/authors/${firebaseKey}.json`, authorObj)
+    .then(() => {
       getAuthors().then(resolve);
     }).catch(reject);
 });
 
-// FIXME: UPDATE AUTHOR
-const updateAuthor = () => {};
-
 // TODO: GET A SINGLE AUTHOR'S BOOKS
-const getAuthorBooks = (authorId) => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/books.json?orderBy="author_id"&equalTo="${authorId}"`)
+const getAuthorBooks = (firebaseKey) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books.json?orderBy="author_id"&equalTo="${firebaseKey}"`)
     .then((response) => resolve(Object.values(response.data)))
-    .catch(reject);
+    .catch((error) => reject(error));
 });
 
 export {
@@ -60,4 +80,5 @@ export {
   deleteSingleAuthor,
   updateAuthor,
   getAuthorBooks,
+  // getFavoriteAuthors,
 };
