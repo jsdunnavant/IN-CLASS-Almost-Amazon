@@ -8,7 +8,7 @@ const getAuthors = (uid) => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/authors.json?orderBy="uid"&equalTo="${uid}"`)
     .then((response) => {
       if (response.data === null) {
-        resolve(null);
+        resolve([]);
       } else {
         resolve(Object.values(response.data));
       }
