@@ -28,7 +28,7 @@ const domEvents = (uid) => {
     if (e.target.id.includes('edit-book-btn')) {
       const [, firebaseKey] = e.target.id.split('--');
       getSingleBook(firebaseKey).then((bookObj) => {
-        addBookForm(uid, bookObj);
+        addBookForm(bookObj, uid);
       });
     }
     // TODO: CLICK EVENT FOR VIEW BOOK DETAILS
@@ -42,14 +42,17 @@ const domEvents = (uid) => {
       // eslint-disable-next-line no-alert
       if (window.confirm('Want to delete?')) {
         const [, firebaseKey] = e.target.id.split('--');
-        // deleteAuthorBooks(firebaseKey).then(showAuthors);
-        deleteAuthorBooks(firebaseKey).then((authorsArray) => showAuthors(authorsArray));
+        deleteAuthorBooks(firebaseKey, uid).then(showAuthors);
+        // deleteSingleAuthor(firebaseKey).then((authorsArray) => showAuthors(authorsArray));
       }
     }
+
+    // Student addition: click event for viewing author details and their books
     if (e.target.id.includes('view-author-btn')) {
       const [, authorFirebaseKey] = e.target.id.split('--');
       viewAuthorDetails(authorFirebaseKey).then((authorBooksObject) => viewAuthor(authorBooksObject));
     }
+
     // FIXME: ADD CLICK EVENT FOR SHOWING FORM FOR ADDING AN AUTHOR
     if (e.target.id.includes('add-author-btn')) {
       addAuthorForm();

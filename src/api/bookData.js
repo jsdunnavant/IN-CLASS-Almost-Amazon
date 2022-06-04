@@ -47,9 +47,9 @@ const createBook = (bookObj) => new Promise((resolve, reject) => {
 });
 
 // TODO: UPDATE BOOK
-const updateBook = (bookObj) => new Promise((resolve, reject) => {
+const updateBook = (bookObj, uid) => new Promise((resolve, reject) => {
   axios.patch(`${dbUrl}/books/${bookObj.firebaseKey}.json`, bookObj)
-    .then(() => getBooks(bookObj.uid).then(resolve))
+    .then(() => getBooks(uid).then(resolve))
     .catch(reject);
 });
 
@@ -62,6 +62,13 @@ const booksOnSale = (uid) => new Promise((resolve, reject) => {
     }).catch(reject);
 });
 
+// TODO: FILTER AUTHOR'S BOOKS
+const authorsBooks = (firebaseKey) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books.json?orderBy="author_id"&equalTo="${firebaseKey}"`)
+    .then((response) => resolve(response.data))
+    .catch((error) => reject(error));
+});
+
 // TODO: STRETCH...SEARCH BOOKS
 
 export {
@@ -71,4 +78,5 @@ export {
   deleteBook,
   getSingleBook,
   updateBook,
+  authorsBooks,
 };

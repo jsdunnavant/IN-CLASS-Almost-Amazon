@@ -29,7 +29,7 @@ const navigationEvents = (uid) => {
   });
 
   // document.querySelector('#favorite-authors').addEventListener('click', () => {
-  //   getFavoriteAuthors().then((favoriteAuthorsArray) => showAuthors(favoriteAuthorsArray));
+  //   getFavoriteAuthors(uid).then((favoriteAuthorsArray) => showAuthors(favoriteAuthorsArray));
   // });
 
   // STRETCH: SEARCH

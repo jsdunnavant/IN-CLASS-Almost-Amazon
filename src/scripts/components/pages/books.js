@@ -1,6 +1,10 @@
 import clearDom from '../../helpers/clearDom';
 import renderToDOM from '../../helpers/renderToDom';
 
+const emptyBooks = () => {
+  document.querySelector('#store').innerHTML = '<h1>No Items</h1>';
+};
+
 const showBooks = (array) => {
   clearDom();
 
@@ -23,11 +27,9 @@ const showBooks = (array) => {
       </div>`;
     });
     renderToDOM('#store', domString);
+  } else {
+    emptyBooks();
   }
-};
-
-const emptyBooks = () => {
-  document.querySelector('#store').innerHTML = '<h1>No Items</h1>';
 };
 
 export { showBooks, emptyBooks };
